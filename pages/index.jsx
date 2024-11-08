@@ -2,7 +2,7 @@ import Image from "next/image";
 import localFont from "next/font/local";
 import Head from 'next/head'
 import Header from "../components/layout/Header";
-import Home from "./Home";
+import Home from '../pages/home';
 
 export default function Index() {
   return (
