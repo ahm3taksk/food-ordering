@@ -15,7 +15,7 @@ const Header = () => {
             <div>
                 <Logo />
             </div>
-            <nav className={`sm:static absolute top-0 left-0 grid place-content-center sm:h-auto h-full sm:w-auto w-full text-black sm:text-white sm:bg-transparent bg-white ${isMenuModal !== true && "hidden"}`}>
+            <nav className={`sm:static absolute top-0 left-0 sm:h-auto h-full sm:w-auto w-full text-black sm:text-white sm:bg-transparent bg-white sm:flex hidden ${isMenuModal === true && "!grid place-content-center"}`}>
                 <ul className='flex gap-x-2 sm:flex-row flex-col'>
                     <li className='px-[5px] py-[10px] uppercase hover:text-primary cursor-pointer'>
                         <a href="">Home</a>
