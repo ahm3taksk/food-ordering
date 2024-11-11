@@ -8,8 +8,8 @@ export default function Index() {
   return (
     <div className="">
       <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
+        <title>Food Ordering</title>
+        <link rel="icon" href="/images/about-img.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
