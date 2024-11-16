@@ -2,6 +2,7 @@ import About from '../..//components/About'
 import MenuWrapper from '../..//components/products/MenuWrapper'
 import Campaigns from '../../components/Campaigns'
 import Carousel from '../../components/Carousel'
+import Input from '../../components/form/Input'
 import React from 'react'
 
 const Index = () => {
