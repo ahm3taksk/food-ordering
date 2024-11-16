@@ -5,7 +5,7 @@ import Title from './ui/Title'
 const About = () => {
   return (
     <div className='bg-secondary'>
-        <div className='container mx-auto py-14 flex sm:flex-auto flex-wrap sm:justify-center justify-center  items-center text-white gap-20 px-5 sm:px-0'>
+        <div className='container mx-auto py-14 flex sm:flex-auto flex-wrap sm:justify-center justify-center  items-center text-white gap-20 px-5 md:px-0'>
             <div className=''>
                 <div className='relative sm:w-[445px] w-[245px] sm:h-[600px] h-[300px]'>
                     <Image src={'/images/about-img.png'} alt='' layout='fill'/>

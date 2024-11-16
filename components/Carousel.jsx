@@ -14,7 +14,7 @@ const Carousel = () => {
     autoplaySpeed: 30000,
     appendDots: (dots) => (
         <div>
-            <ul className="container mx-auto px-5 sm:px-0 w-full text-start">{dots}</ul>
+            <ul className="container mx-auto px-5 md:px-0 w-full text-start">{dots}</ul>
         </div>
     ),
     customPaging: (i) => (
@@ -37,7 +37,7 @@ const Carousel = () => {
         </div>
         <Slider {...settings} >
             <div>
-            <div className="mt-48 container mx-auto px-5 sm:px-0 text-white flex flex-col items-start gap-y-8">
+            <div className="mt-48 container mx-auto px-5 md:px-0 text-white flex flex-col items-start gap-y-8">
                 <Title addClass="text-5xl">Fast Food Restaurant</Title>
                 <p className="text-sm sm:w-2/5 w-full">
                 Doloremque, itaque aperiam facilis rerum, commodi, temporibus
@@ -49,7 +49,7 @@ const Carousel = () => {
             </div>
             </div>
             <div>
-                <div className="mt-48 container mx-auto px-5 sm:px-0 text-white flex flex-col items-start gap-y-8">
+                <div className="mt-48 container mx-auto px-5 md:px-0 text-white flex flex-col items-start gap-y-8">
                     <Title addClass="text-5xl">Adana Kebapcine</Title>
                     <p className="text-sm sm:w-2/5 w-full">
                     Doloremque, itaque aperiam facilis rerum, commodi, temporibus

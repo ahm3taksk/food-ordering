@@ -1,3 +1,4 @@
+import Reservation from '../../components/Reservation'
 import About from '../..//components/About'
 import MenuWrapper from '../..//components/products/MenuWrapper'
 import Campaigns from '../../components/Campaigns'
@@ -12,6 +13,7 @@ const Index = () => {
             <Campaigns />
             <MenuWrapper />
             <About />
+            <Reservation />
         </div>
     )
 }

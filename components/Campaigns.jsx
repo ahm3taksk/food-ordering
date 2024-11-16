@@ -22,7 +22,7 @@ const CampaignItem = () => {
 
 const Campaigns = () => {
   return (
-    <div className="flex container mx-auto py-20 gap-6 flex-wrap px-5 sm:px-0">
+    <div className="flex container mx-auto py-20 gap-6 flex-wrap px-5 md:px-0">
         <CampaignItem />
         <CampaignItem />
     </div>
