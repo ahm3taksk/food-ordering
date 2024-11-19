@@ -24,6 +24,7 @@ const Profile = () => {
                         <button>Account</button>
                     </li>
                     <li onClick={() => setTabs(1)} className={`border w-full p-3 flex items-center justify-center gap-x-2 cursor-pointer hover:bg-primary hover:text-white transition-all ${tabs === 1 && 'bg-primary text-white' }`}>
+                        <i class="fa-solid fa-key"></i>
                         <button>Password</button>
                     </li>
                     <li onClick={() => setTabs(2)} className={`border w-full p-3 flex items-center justify-center gap-x-2 cursor-pointer hover:bg-primary hover:text-white transition-all ${tabs === 2 && 'bg-primary text-white' }`}>
