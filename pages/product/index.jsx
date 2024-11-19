@@ -5,8 +5,7 @@ import Header from '../../components/layout/Header';
 
 const Index = () => {
   return (
-    <div>
-        <Header />
+    <React.Fragment>
         <div className='container flex flex-wrap md:justify-start sm:justify-center justify-center sm:items-start content-start mx-auto h-screen mt-20 gap-x-20 gap-y-5 px-5 sm:px-0'>
             <div className='relative sm:!w-[600px] sm:h-[600px] w-[260px] h-[260px]'>
                 <Image src={"/images/f1.png"} className=' rounded-3xl border-4 border-primary'  alt='' layout='fill' objectFit='cover'/>
@@ -46,7 +45,7 @@ const Index = () => {
                 <button className='btn-primary mt-6 w-40'>Add To Cart</button>
             </div>
         </div>
-    </div>
+    </React.Fragment>
   )
 }
 
