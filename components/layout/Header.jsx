@@ -1,19 +1,19 @@
 import React, { useState } from 'react'
-import Logo from '../ui/Logo'
+import  Logo from '../ui/Logo'
 import {FaUserAlt, FaShoppingCart, FaSearch, FaRegTimesCircle} from 'react-icons/fa'
 import { GiHamburgerMenu } from "react-icons/gi";
 import Search from '../ui/Search';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { useSelector } from 'react-redux';
 
 
 const Header = () => {
    const [isSearchModal, setIsSearchModal] = useState(false)
    const [isMenuModal, setIsMenuModal] = useState(false)
+   const cart = useSelector((state) => state.cart)
 
    const router = useRouter()
-
-
 
   return (
     <div className={`h-[88px] z-40 relative ${router.asPath === "/" ? 'bg-transparent' : 'bg-secondary'}`}>
@@ -47,7 +47,13 @@ const Header = () => {
                     <FaUserAlt className='hover:text-primary transition-all cursor-pointer' />
                 </Link>
                 <Link href="/cart">
-                    <FaShoppingCart className='hover:text-primary transition-all'/>
+                    <span className='relative'>
+                        <FaShoppingCart className='hover:text-primary transition-all'/>
+                        <span className='w-4 h-4 absolute -top-2.5 -right-3  flex justify-center items-center rounded-full bg-primary text-xs text-black font-bold'>
+                            {cart.products.length === 0 ? "0" : cart.products.length}
+                        </span>
+                    </span>
+                    
                 </Link>
                 <button onClick={() => setIsSearchModal(true)}>
                     <FaSearch className='hover:text-primary transition-all' />
