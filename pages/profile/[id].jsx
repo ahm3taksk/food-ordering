@@ -3,20 +3,34 @@ import Image from 'next/image'
 import Account from '../../components/profile/Account'
 import Password from '../../components/profile/Password';
 import Orders from '../../components/profile/Orders';
+import { useRouter } from 'next/router';
+import { signOut, getSession, useSession } from 'next-auth/react';
+import { toast } from 'react-toastify';
+import axios from 'axios';
 
-const Profile = () => {
+const Profile = ({user}) => {
+    const { data: session } = useSession();
+    const { push } = useRouter();
 
     const [tabs, setTabs] = React.useState(0);
 
+    const handleSignOut = () => {
+        if(confirm("Are you sure you want to logout?")) {
+            signOut({redirect: false});
+            session && push('/auth/login');
+            toast.success('Logout Success');
+        } else {
+            toast.warning('Logout Cancelled');
+        }
+    }
 
-
-  return (
+return (
     <div className='container mx-auto px-5 md:px-0'>
         <div className='flex flex-1 min-h-[calc(100vh_-_465px)] gap-x-10 md:flex-row flex-col'>
             <div className='w-full md:w-64'>
                 <div className='relative flex flex-col items-center gap-y-1 p-10 border border-b-0'>
-                    <Image src="/images/profile.png" alt="" width={100} height={100} className='rounded-full'/>
-                    <span className='font-bold text-2xl'>Sabri Abi</span>
+                    <Image src={user.image ? user.image : "/images/profile.png"} alt="" width={100} height={100} className='rounded-full'/>
+                    <span className='font-bold text-xl text-center'>{user.fullName}</span>
                 </div>
                 <ul className='w-full font-semibold'>
                     <li onClick={() => setTabs(0)} className={`border w-full p-3 flex items-center justify-center gap-x-2 cursor-pointer hover:bg-primary hover:text-white transition-all ${tabs === 0 && 'bg-primary text-white' }`}>
@@ -31,18 +45,40 @@ const Profile = () => {
                         <i class="fa-solid fa-boxes-stacked"></i>
                         <button>Orders</button>
                     </li>
-                    <li onClick={() => setTabs(3)} className={`border w-full p-3 flex items-center justify-center gap-x-2 cursor-pointer hover:bg-primary hover:text-white transition-all ${tabs === 3 && 'bg-primary text-white' }`}>
+                    <li onClick={handleSignOut} className='border w-full p-3 flex items-center justify-center gap-x-2 cursor-pointer hover:bg-primary hover:text-white transition-all'>
                         <i class="fa-solid fa-right-from-bracket"></i>
                         <button>Logout</button>
                     </li>
                 </ul>
             </div>
-            {tabs === 0 && ( <Account /> )}
-            {tabs === 1 && ( <Password /> )}
+            {tabs === 0 && ( <Account user={user} /> )}
+            {tabs === 1 && ( <Password user={user} /> )}
             {tabs === 2 && ( <Orders /> )}
         </div>
     </div>
-  )
+)
+}
+
+export async function getServerSideProps({req, params}) {
+    const session = await getSession({req})
+    
+    if(!session){
+        return {
+            redirect: {
+                destination: '/auth/login',
+                permanent: false,
+            }
+        }
+    }
+
+    const user = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users//${params.id}`);
+
+    return {
+        props: {
+            session,
+            user: user ? user.data : null,
+        }
+    }
 }
 
 export default Profile

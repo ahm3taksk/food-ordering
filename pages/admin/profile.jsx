@@ -4,11 +4,29 @@ import Product from '../../components/admin/Product'
 import Order from '../../components/admin/Order'
 import Category from '../../components/admin/Category'
 import Footer from '../../components/admin/Footer'
+import { toast } from 'react-toastify'
+import axios from 'axios'
+import { useRouter } from 'next/router'
 
 
 const Profile = () => {
 
     const [tabs, setTabs] = React.useState(0);
+    const { push } = useRouter();
+
+    const closeAdminAccount = async () => {
+        try {
+            if(confirm("Are you sure you want to logout?")) {
+                const res = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/admin`);
+                if (res.status === 200) {
+                    push('/admin');
+                    toast.success('Logout Success');
+                }
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }
 
   return (
     <div className='container mx-auto px-5 md:px-0'>
@@ -35,7 +53,7 @@ const Profile = () => {
                         <i class="fa-solid fa-table"></i>
                         <button>Footer</button>
                     </li>
-                    <li className='border w-full p-3 flex items-center justify-center gap-x-2 cursor-pointer hover:bg-primary hover:text-white transition-all'>
+                    <li onClick={closeAdminAccount} className='border w-full p-3 flex items-center justify-center gap-x-2 cursor-pointer hover:bg-primary hover:text-white transition-all'>
                         <i class="fa-solid fa-right-from-bracket"></i>
                         <button>Logout</button>
                     </li>
@@ -48,6 +66,21 @@ const Profile = () => {
         </div>
     </div>
   )
+}
+
+export const getServerSideProps = async (ctx) => {
+    const myCookie = ctx.req.cookies || "";
+    if (myCookie.token !== process.env.ADMIN_TOKEN) {
+        return {
+            redirect: {
+                destination: '/admin',
+                permanent: false,
+            },
+        }
+    }
+    return {
+        props: {},
+    }
 }
 
 export default Profile

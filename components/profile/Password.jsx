@@ -3,15 +3,21 @@ import Title from '../ui/Title'
 import Input from '../form/Input'
 import { useFormik } from 'formik';
 import { passwordSchema } from '../../schema/passwordSchema';
+import axios from 'axios';
 
-const Password = () => {
+const Password = ({user}) => {
 
     const onSubmit = async (values, actions) => {
-        await new Promise((resolve => setTimeout(resolve, 4000)));
+        try {
+            const res = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/users/${user._id}`, values);
+        } catch (error) {
+            console.log(error);
+        }
         actions.resetForm();
     }
 
     const {values, errors, touched, handleSubmit, handleChange, handleBlur} = useFormik({
+        enableReinitialize: true,
         initialValues: {
             password: '',
             confirmPassword: '',

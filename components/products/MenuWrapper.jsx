@@ -1,17 +1,21 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Title from '../ui/Title'
 import MenuItem from './MenuItem'
 
-const MenuWrapper = () => {
+const MenuWrapper = ({categoryList}) => {
+
+  const [active, setActive] = useState(0)
+
   return (
-    <div className='container mx-auto mb-16 px-5 md:px-0'>
+    <div className='container mx-auto mt-5 mb-16 px-5 md:px-0'>
         <div className='flex flex-col items-center w-full'>
             <Title addClass={"text-[40px]"}>Our Menu</Title>
-            <div className='mt-10'> 
-                <button className='px-6 py-2 bg-secondary rounded-3xl text-white'>All</button>
-                <button className='px-6 py-2 rounded-3xltext-white'>Burger</button>
-                <button className='px-6 py-2 rounded-3xltext-white'>Pizza</button>
-                <button className='px-6 py-2 rounded-3xltext-white'>Drink</button>
+            <div className='mt-10 flex-wrap justify-center items-center flex gap-2'> 
+                {categoryList && categoryList.map((category, index) => (
+                    <button className={`px-6 py-2  rounded-3xl hover:bg-secondary hover:text-white transition-all ${index === active && "bg-secondary text-white" }`} key={category._id} onClick={() => setActive(index)}>
+                      {category.title}
+                    </button>
+                  ))}
             </div>
         </div>
         <div className='mt-8 grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4'>
