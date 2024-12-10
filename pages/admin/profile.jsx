@@ -7,11 +7,14 @@ import Footer from '../../components/admin/Footer'
 import { toast } from 'react-toastify'
 import axios from 'axios'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
+import AddProduct from '../../components/admin/AddProduct'
 
 
 const Profile = () => {
 
-    const [tabs, setTabs] = React.useState(0);
+    const [tabs, setTabs] = useState(0);
+    const [isProductModal, setIsProductModal] = useState(false);
     const { push } = useRouter();
 
     const closeAdminAccount = async () => {
@@ -63,6 +66,12 @@ const Profile = () => {
             {tabs === 1 && ( <Order /> )}
             {tabs === 2 && ( <Category /> )}
             {tabs === 3 && ( <Footer /> )}
+            {isProductModal && 
+                <AddProduct setIsProductModal={setIsProductModal} />
+            }
+            <button className='btn-primary absolute !w-12 !h-12 !p-0 bottom-96 right-10 text-2xl' onClick={() => setIsProductModal(true)}>
+                <i class="fa-solid fa-plus"></i>
+            </button>
         </div>
     </div>
   )

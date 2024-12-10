@@ -2,7 +2,7 @@ import Title from '../ui/Title'
 
 const Order = () => {
   return (
-    <div className='p-0 pb-8 md:p-8 flex-1 flex flex-col items-center md:items-start'>
+    <div className='p-0 pb-8 flex-1 flex flex-col items-center md:items-start'>
     <Title addClass={"text-[40px]"}>Orders</Title>
     <div className='overflow-x-auto w-full mt-5'>
         <table className='w-full text-sm text-center text-gray-500 min-w[1000px]'>
