@@ -25,10 +25,14 @@ const MenuWrapper = ({categoryList, productList}) => {
                   ))}
             </div>
         </div>
-        <div className='mt-8 grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 min-h-[400px]:'>
-            {filter.length > 0 && filter.map((product) => (
+        <div className= {`mt-8 grid grid-cols-1 gap-4 min-h-[400px]: ${filter.length > 0 && 'md:grid-cols-3 sm:grid-cols-2 grid-cols-1'}` }>
+            {filter.length > 0 ? filter.map((product) => (
               <MenuItem key={product._id} product={product}/>
-            ))}
+            )) 
+            :  <div className='w-full h-60 bg-[#f1f2f3] flex justify-center items-center rounded-[46px]'> 
+                <h1 className='text-2xl'>We are currently out of stock on this category</h1>
+              </div>
+            }
         </div>
     </div>
   )
