@@ -24,12 +24,12 @@ const Index = () => {
                     </thead>
                     <tbody>
                         {cart.products.map((product) => (
-                            <tr key={product.id} className='bg-secondary border-gray-700 hover:bg-primary transition-all'>
+                            <tr key={product._id} className='bg-secondary border-gray-700 hover:bg-primary transition-all'>
                                 <td className='py-4 px-6 font-medium whitespace-nowrap hover:text-white flex items-center gap-x-2 justify-center'>
                                     <Image src="/images/f1.png" width={40} height={40} alt='' />
-                                    <span>{product.name}</span>
+                                    <span>{product.title}</span>
                                 </td>
-                                <td className='py-4 px-6 font-medium whitespace-nowrap hover:text-white'>{product.extras.map((item) => <span key={item.id}>{item.name}, </span>)}</td>
+                                <td className='py-4 px-6 font-medium whitespace-nowrap hover:text-white'>{product.extras.map((item) => <span key={item._id}>{item.text},</span>)}</td>
                                 <td className='py-4 px-6 font-medium whitespace-nowrap hover:text-white'>${product.price}</td>
                                 <td className='py-4 px-6 font-medium whitespace-nowrap hover:text-white'>{product.quantity}</td>
                             </tr>

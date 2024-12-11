@@ -1,12 +1,43 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
 import Title from '../ui/Title'
 import Image from 'next/image'
+import { toast } from 'react-toastify'
 
 const Product = () => {
+    const [products, setProducts] = useState([])
+
+    useEffect(() => {
+        const getProducts = async () => {
+            try {
+                const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/products`);
+                setProducts(res.data);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        getProducts();
+    }, [])
+
+    const handleDelete = async (id) => {
+        try {
+            if(confirm("Are you sure you want to delete this product?")) {
+                const res = await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/products/${id}`);
+                if (res.status === 200) {
+                    setProducts(products.filter((product) => product._id !== id));
+                    toast.warning('Product Deleted');
+                }
+            }
+            
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    
   return (
     <div className='p-0 pb-8 flex-1 flex flex-col items-center md:items-start'>
     <Title addClass={"text-[40px]"}>Products</Title>
-    <div className='overflow-x-auto w-full mt-5 '>
+    <div className='w-full mt-5  max-h-[400px] overflow-auto'>
         <table className='w-full text-sm text-center text-gray-500 min-w[1000px]'>
             <thead className='text-xs text-gray-400 uppercase bg-gray-700'>
                 <tr>
@@ -18,17 +49,19 @@ const Product = () => {
                 </tr>
             </thead>
             <tbody>
-                <tr className='bg-secondary border-gray-700 hover:bg-primary transition-all'>
-                    <td className='py-4 px-6 font-medium whitespace-nowrap hover:text-white flex items-center justify-center gap-x-1'>
-                        <Image src='/images/f1.png' alt='' width={50} height={50}/>
-                    </td>
-                    <td className='py-4 px-6 font-medium whitespace-nowrap hover:text-white'>191235</td>
-                    <td className='py-4 px-6 font-medium whitespace-nowrap hover:text-white'>Good Pizza</td>
-                    <td className='py-4 px-6 font-medium whitespace-nowrap hover:text-white'>$35.5</td>
-                    <td className='py-4 px-6 font-medium whitespace-nowrap hover:text-white'>
-                        <button className="btn-primary !bg-danger">Delete</button>
-                    </td>
-                </tr>
+                {products.length > 0 && products.map((product) => (
+                    <tr key={product._id} className='bg-secondary border-gray-700 hover:bg-primary transition-all'>
+                        <td className='py-4 px-6 font-medium whitespace-nowrap hover:text-white flex items-center justify-center gap-x-1'>
+                            <Image src={product.img} alt={product.title} width={50} height={50}/>
+                        </td>
+                        <td className='py-4 px-6 font-medium whitespace-nowrap hover:text-white'>{product._id}</td>
+                        <td className='py-4 px-6 font-medium whitespace-nowrap hover:text-white'>{product.title}</td>
+                        <td className='py-4 px-6 font-medium whitespace-nowrap hover:text-white'>{product.prices[0]}</td>
+                        <td className='py-4 px-6 font-medium whitespace-nowrap hover:text-white'>
+                            <button className="btn-primary !bg-danger" onClick={() => handleDelete(product._id)}>Delete</button>
+                        </td>
+                    </tr>
+                ))}
             </tbody>
         </table>
     </div>
