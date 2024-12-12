@@ -1,13 +1,44 @@
-import React from 'react'
 import Image from 'next/image'
 import Title from '../../components/ui/Title'
 import { useDispatch, useSelector } from 'react-redux';
 import { reset } from '../../redux/cartSlice';
+import axios from 'axios';
+import { useSession} from 'next-auth/react';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/router';
 
-const Index = () => {
-
+const Index = ({userList}) => {
+    const {data: session} = useSession()
     const cart = useSelector((state) => state.cart)
     const dispatch = useDispatch()
+    const user = userList.find((user) => user.email === session?.user?.email)
+    const router = useRouter()
+
+    const newOrder = {
+        customer: user?.fullName,
+        address: user?.address ? user?.address : "No address",
+        total: cart.total,
+        status: 0,
+        method: 0,
+    }
+
+    const createOrder = async () => {
+        try {
+            if (session){
+                if(confirm("Are you sure you want to place this order?")){
+                    const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/orders`, newOrder);
+                    if (res.status === 201) {
+                        router.push(`/order/${res.data._id}`)
+                        dispatch(reset())
+                        toast.success("Order placed successfully", {autoClose : 1000}) 
+                    }
+                }
+            }
+        } catch (error) {
+            toast.error("Please login first", {autoClose : 1000})
+            console.log(error)
+        }
+    }
 
   return (
     <div className='min-h-[calc(100vh_-_465px)]'>
@@ -44,11 +75,20 @@ const Index = () => {
                     <span><b>Discount: </b>$0.00</span>
                     <span><b>Total: </b>${cart.total}</span>
                 </div>
-                <button onClick={() => dispatch(reset())} className='btn-primary mt-4'>Go to checkout</button>
+                <button onClick={createOrder} className='btn-primary mt-4'>Go to checkout</button>
             </div>
         </div>
     </div>
   )
+}
+
+export const getServerSideProps = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users`);
+    return {
+        props: {
+            userList: res.data ? res.data : [],
+        }
+    }
 }
 
 export default Index

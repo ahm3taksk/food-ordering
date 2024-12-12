@@ -37,7 +37,7 @@ const Product = () => {
   return (
     <div className='p-0 pb-8 flex-1 flex flex-col items-center md:items-start'>
     <Title addClass={"text-[40px]"}>Products</Title>
-    <div className='w-full mt-5  max-h-[400px] overflow-auto'>
+    <div className='w-full mt-5 max-h-[400px] overflow-auto'>
         <table className='w-full text-sm text-center text-gray-500 min-w[1000px]'>
             <thead className='text-xs text-gray-400 uppercase bg-gray-700'>
                 <tr>
