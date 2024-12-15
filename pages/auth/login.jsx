@@ -20,12 +20,6 @@ const Login = () => {
     try {
       const res = await signIn("credentials", options);
       actions.resetForm();
-      if (res?.error) {
-        toast.error(res.error);
-      } else {
-        push("/profile/" + currentUser?._id);
-        toast.success("Login Success");
-      }
     } catch (err) {
       console.log(err);
     }
@@ -40,7 +34,7 @@ const Login = () => {
         );
         session && push("/profile/" + currentUser?._id);
       } catch (err) {
-        toast.error(err.message);
+        console.log(err);
       }
     };
     getUser();
@@ -95,24 +89,23 @@ const Login = () => {
   )
 }
 
-export async function getServerSideProps({req}) {
-  const session = await getSession({req})
+export async function getServerSideProps({ req }) {
+  const session = await getSession({ req });
 
   const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users`);
   const user = res.data?.find((user) => user.email === session?.user.email);
-
-  if(session && user){
+  if (session && user) {
     return {
       redirect: {
-        destination: '/profile/' + user._id,
+        destination: "/profile/" + user._id,
         permanent: false,
-      }
-    } 
+      },
+    };
   }
 
   return {
-      props: {},
-  }
+    props: {},
+  };
 }
 
 export default Login
