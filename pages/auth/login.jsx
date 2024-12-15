@@ -25,6 +25,7 @@ const Login = () => {
         push('/profile/' + currentUser._id);
       }else{
         toast.error('Login Failed');
+        console.log(res);
       }
     } catch (err) {
       toast.error(err.error);
