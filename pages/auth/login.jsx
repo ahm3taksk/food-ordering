@@ -20,8 +20,14 @@ const Login = () => {
     try {
       const res = await signIn("credentials", options);
       actions.resetForm();
+      toast.success('Login Success');
+      if (res.status === 200) {
+        push('/profile/' + currentUser._id);
+      }else{
+        toast.error('Login Failed');
+      }
     } catch (err) {
-      console.log(err);
+      toast.error(err.error);
     }
   };
 
