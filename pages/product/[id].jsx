@@ -25,9 +25,11 @@ const Index = ({food}) => {
     }
 
     const changePrice = (number) => {
-        setPrice(price + number)
-    }
-
+        const currentPrice = Number(price) + number
+        const fixedPrice = currentPrice.toFixed(2)
+        setPrice(parseFloat(fixedPrice))
+    };
+    
     const handleChange = (e, item) => {
         const checked = e.target.checked
         if(checked) {
