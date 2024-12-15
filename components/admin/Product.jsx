@@ -57,7 +57,7 @@ const Product = () => {
                 </tr>
             </thead>
             <tbody>
-                {products.length > 0 && products.map((product) => (
+                {products.length > 0 && products.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((product) => (
                     <tr key={product._id} className='bg-secondary border-gray-700 hover:bg-primary transition-all'>
                         <td className='py-4 px-6 font-medium whitespace-nowrap hover:text-white flex items-center justify-center gap-x-1'>
                             <Image src={product.img} alt={product.title} width={50} height={50}/>
