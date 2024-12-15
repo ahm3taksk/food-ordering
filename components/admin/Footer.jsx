@@ -3,35 +3,78 @@ import Title from '../ui/Title'
 import Input from '../form/Input'
 import { useFormik } from 'formik';
 import { footerSchema } from '../../schema/footerSchema';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const Footer = () => {
-
-    const [linkAddress, setLinkAddress] = useState("");
-    const [iconName, setIconName] = useState("");
-    const [icons, setIcons] = useState(
-        [
-            "fa-brands fa-facebook-f",
-            "fa-brands fa-twitter",
-            "fa-brands fa-linkedin-in",
-            "fa-brands fa-instagram",
-            "fa-brands fa-pinterest",
-        ]
-    )
+    const [iconName, setIconName] = useState("fa");
+    const [linkAddress, setLinkAddress] = useState("https://");
+    const [footerData, setFooterData] = useState([])
+    const [socialMediaLinks, setSocialMediaLinks] = useState([])
+    useEffect(() => {
+        const getFooterData = async () => {
+            try {
+            const res = await axios.get(
+                `${process.env.NEXT_PUBLIC_API_URL}/footer`
+            );
+            setFooterData(res.data[0]);
+            setSocialMediaLinks(res.data[0]?.socialMedia);
+            } catch (err) {
+            console.log(err);
+            }
+        };
+        getFooterData();
+    }, []);
 
     const onSubmit = async (values, actions) => {
-        await new Promise((resolve => setTimeout(resolve, 4000)));
-        actions.resetForm();
-    }
+        try {
+            const res = await axios.put(
+                `${process.env.NEXT_PUBLIC_API_URL}/footer/${footerData._id}`,
+                {
+                    location: values.location,
+                    email: values.email,
+                    phoneNumber: values?.phoneNumber,
+                    desc: values.desc,
+                    openingHours: {
+                        day: values.day,
+                        hour: values.time,
+                    },
+                    socialMedia: socialMediaLinks,
+                }
+            );
+            if (res.status === 200) {
+                toast.success("Footer updated successfully");
+            } else {
+                toast.error("Something went wrong");
+            }
 
-    const {values, errors, touched, handleSubmit, handleChange, handleBlur} = useFormik({
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    
+    const handleCreate = () => {
+        if (socialMediaLinks.some(link => link.icon === iconName && link.link === linkAddress)) {
+            toast.error("This link already exists!");
+            return;
+        }
+        setSocialMediaLinks((prev) => [...prev, { icon: iconName, link: linkAddress }]);
+        setLinkAddress("https://");
+        setIconName("");
+    };
+    
+
+    const { values, errors, touched, handleSubmit, handleChange, handleBlur } =
+    useFormik({
+        enableReinitialize: true,
         initialValues: {
-            location: '',
-            email: '',
-            phoneNumber: '',
-            desc: '',
-            day: '',
-            time: '',
+            location: footerData?.location,
+            email: footerData?.email,
+            phoneNumber: footerData?.phoneNumber,
+            desc: footerData?.desc,
+            day: footerData?.openingHours?.day,
+            time: footerData?.openingHours?.hour,
         },
         onSubmit,
         validationSchema: footerSchema,
@@ -40,7 +83,7 @@ const Footer = () => {
     const inputs = [
         {
             id: 'location',
-            name: 'location',
+            Name: 'location',
             type: 'text',
             placeholder: 'Location',
             value: values.location,
@@ -49,7 +92,7 @@ const Footer = () => {
         },
         {
             id: 'email',
-            name: 'email',
+            Name: 'email',
             type: 'email',
             placeholder: 'Email',
             value: values.email,
@@ -58,7 +101,7 @@ const Footer = () => {
         },
         {
             id: 'phoneNumber',
-            name: 'phoneNumber',
+            Name: 'phoneNumber',
             type: 'text',
             placeholder: 'Phone Number',
             value: values.phoneNumber,
@@ -67,7 +110,7 @@ const Footer = () => {
         },
         {
             id: 'desc',
-            name: 'desc',
+            Name: 'desc',
             type: 'text',
             placeholder: 'Description',
             value: values.desc,
@@ -76,7 +119,7 @@ const Footer = () => {
         },
         {
             id: 'day',
-            name: 'day',
+            Name: 'day',
             type: 'text',
             placeholder: 'Day',
             value: values.day,
@@ -85,7 +128,7 @@ const Footer = () => {
         },
         {
             id: 'time',
-            name: 'time',
+            Name: 'time',
             type: 'text',
             placeholder: 'Time',
             value: values.time,
@@ -95,34 +138,42 @@ const Footer = () => {
     ]
 
   return (
-    <React.Fragment>
-        <form onSubmit={handleSubmit} className='p-0 pb-8 md:p-8 flex-1 flex flex-col items-center md:items-start'>
+    <div>
+        <form className='p-0 pb-8 md:p-8 flex-1 flex flex-col items-center md:items-start' onSubmit={handleSubmit}>
             <Title addClass={"text-[40px]"}>Footer Content</Title>
                 <div className='grid lg:grid-cols-2 grid-cols-1 gap-4 mt-4 w-full'>
                     {inputs.map((input) => (
-                        <Input key="input.id" {...input} onBlur={handleBlur} onChange={handleChange} />
+                        <Input key={input.id} {...input} onBlur={handleBlur} onChange={handleChange} />
                     ))}
                 </div>
                 <div className='mt-4 flex items-center gap-4 w-full'>
                     <div className='flex flex-col sm:flex-row items-center gap-4 w-full'>
-                        <Input placeholder="Link Address" value="https://"/>
-                        <Input placeholder="Icon Name" defaultValue="fa " onChange={(e) => setIconName(e.target.value)}value={iconName}/>
-                        <button className="btn-primary w-full sm:w-1/2" type="button" onClick={() => {setIcons([...icons, iconName]); setIconName("fa")}} > Add Icon</button>
+                    <Input
+                        placeholder="Link Address"
+                        onChange={(e) => setLinkAddress(e.target.value)}
+                        value={linkAddress}
+                    />
+                    <Input
+                        placeholder="Icon Class (Font Awesome)"
+                        onChange={(e) => setIconName(e.target.value)}
+                        value={iconName}
+                    />
+                        <button className="btn-primary w-full sm:w-1/2" type="button" onClick={handleCreate} > Add Icon</button>
                     </div>
                 </div>
                 <ul className='flex flex-wrap items-center gap-x-6 gap-y-2 w-full mt-4 border border-primary p-2'>
-                {icons.map((icon, index) => (
+                {socialMediaLinks.map((item, index) => (
                     <li key={index} className="flex items-center justify-center">
-                        <i className={`${icon} text-2xl`}></i>
-                        <button className="text-danger"  onClick={() => {setIcons((prev) => prev.filter((item, i) => i !== index))}} type="button" >
+                        <i className={`${item.icon} text-2xl`}></i>
+                        <button className="text-danger"  onClick={() => {setSocialMediaLinks((prev) => prev.filter((item, i) => i !== index))}} type="button" >
                             <i className="fa fa-trash text-md ml-2"></i>
                         </button>
                     </li>
                 ))}
                 </ul>
-            <button className='btn-primary w-full md:w-36 mt-4'>Update</button>
+                <button className='btn-primary w-full md:w-36 mt-4' type='submit'>Update</button>
         </form>
-    </React.Fragment>
+    </div>
   )
 }
 
