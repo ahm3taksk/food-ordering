@@ -28,17 +28,24 @@ const Login = () => {
   useEffect(() => {
     const getUser = async () => {
       try {
+        if (!session?.user?.email) return;
         const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users`);
-        setCurrentUser(
-          res.data?.find((user) => user.email === session?.user?.email)
-        );
-        session && push("/profile/" + currentUser?._id);
+        const user = res.data?.find((user) => user.email === session.user.email);
+        setCurrentUser(user);
       } catch (err) {
         console.log(err);
       }
     };
+  
     getUser();
-  }, [session, push, currentUser]);
+  }, [session]);
+  
+  useEffect(() => {
+    if (currentUser?._id) {
+      push("/profile/" + currentUser._id); 
+    }
+  }, [currentUser, push]);
+  
 
   const {values, errors, touched, handleSubmit, handleChange, handleBlur} = useFormik({
     initialValues: {
@@ -92,20 +99,28 @@ const Login = () => {
 export async function getServerSideProps({ req }) {
   const session = await getSession({ req });
 
-  const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users`);
-  const user = res.data?.find((user) => user.email === session?.user.email);
-  if (session && user) {
-    return {
-      redirect: {
-        destination: "/profile/" + user._id,
-        permanent: false,
-      },
-    };
+  if (session) {
+    try {
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users`);
+      const user = res.data?.find((user) => user.email === session?.user?.email);
+
+      if (user) {
+        return {
+          redirect: {
+            destination: "/profile/" + user._id,
+            permanent: false,
+          },
+        };
+      }
+    } catch (error) {
+      console.log("Error fetching user:", error);
+    }
   }
 
   return {
     props: {},
   };
 }
+
 
 export default Login
