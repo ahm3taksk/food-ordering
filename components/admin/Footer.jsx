@@ -138,8 +138,8 @@ const Footer = () => {
     ]
 
   return (
-    <div>
-        <form className='p-0 pb-8 md:p-8 flex-1 flex flex-col items-center md:items-start' onSubmit={handleSubmit}>
+    <div className='w-full overflow-auto md:max-h-[calc(100vh_-_465px)] pb-5'>
+        <form className='flex-1 flex flex-col items-center md:items-start' onSubmit={handleSubmit}>
             <Title addClass={"text-[40px]"}>Footer Content</Title>
                 <div className='grid lg:grid-cols-2 grid-cols-1 gap-4 mt-4 w-full'>
                     {inputs.map((input) => (
@@ -161,17 +161,19 @@ const Footer = () => {
                         <button className="btn-primary w-full sm:w-1/2" type="button" onClick={handleCreate} > Add Icon</button>
                     </div>
                 </div>
-                <ul className='flex flex-wrap items-center gap-x-6 gap-y-2 w-full mt-4 border border-primary p-2'>
-                {socialMediaLinks.map((item, index) => (
-                    <li key={index} className="flex items-center justify-center">
-                        <i className={`${item.icon} text-2xl`}></i>
-                        <button className="text-danger"  onClick={() => {setSocialMediaLinks((prev) => prev.filter((item, i) => i !== index))}} type="button" >
-                            <i className="fa fa-trash text-md ml-2"></i>
-                        </button>
-                    </li>
-                ))}
-                </ul>
-                <button className='btn-primary w-full md:w-36 mt-4' type='submit'>Update</button>
+                <div className='flex flex-col md:flex-row w-full gap-x-5'>
+                    <ul className='flex flex-wrap items-center gap-x-6 gap-y-2 w-full mt-4 border border-primary p-2'>
+                    {socialMediaLinks.map((item, index) => (
+                        <li key={index} className="flex items-center justify-center">
+                            <i className={`${item.icon} text-2xl`}></i>
+                            <button className="text-danger"  onClick={() => {setSocialMediaLinks((prev) => prev.filter((item, i) => i !== index))}} type="button" >
+                                <i className="fa fa-trash text-md ml-2"></i>
+                            </button>
+                        </li>
+                    ))}
+                    </ul>
+                    <button className='btn-primary w-full md:w-36 mt-4' type='submit'>Update</button>
+                </div>
         </form>
     </div>
   )

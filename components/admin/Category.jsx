@@ -42,7 +42,7 @@ const Category = () => {
 
 
   return (
-    <div className='p-0 pb-8 md:p-8 flex-1'>
+    <div className='flex-1 overflow-auto md:max-h-[calc(100vh_-_465px)] pb-5' >
         <Title addClass={"text-[40px]"}>Category</Title>
         <div className='mt-5'>
             <div className='flex gap-4 flex-col sm:flex-row flex-1 items-center'>

@@ -10,10 +10,16 @@ const Account = ({user}) => {
     const onSubmit = async (values, actions) => {
         try {
             const res = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/users/${user._id}`, values);
+            if (res.status === 200) {
+                // refresh form data
+                actions.resetForm();
+                toast.success("Profile updated successfully");
+            } else {
+                toast.error("Something went wrong");
+            }
         } catch (error) {
             console.log(error);
         }
-        actions.resetForm();
     }
 
     const {values, errors, touched, handleSubmit, handleChange, handleBlur} = useFormik({

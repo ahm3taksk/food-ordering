@@ -18,7 +18,7 @@ body {
 }
 
 .slick-dots .slick-active div {
-    @apply bg-primary;
+    @apply bg-primary scale-150;
 }
 
 .slick-dots div {

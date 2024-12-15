@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useSession} from 'next-auth/react';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 const Index = ({userList}) => {
     const {data: session} = useSession()
@@ -44,29 +45,42 @@ const Index = ({userList}) => {
     <div className='min-h-[calc(100vh_-_465px)]'>
         <div className='flex justify-between items-center md:flex-row flex-col'>
             <div className='min-h-[calc(100vh_-_465px)] flex items-center flex-1 p-10 overflow-x-auto w-full'>
-                <table className='w-full text-sm text-center text-gray-500 min-w[1000px]'>
-                    <thead className='text-xs text-gray-400 uppercase bg-gray-700'>
-                        <tr>
-                            <th className='py-3 px-6' scope='col'>PRODUCT</th>
-                            <th className='py-3 px-6' scope='col'>EXTRAS</th>
-                            <th className='py-3 px-6' scope='col'>PRICE</th>
-                            <th className='py-3 px-6' scope='col'>QUANTITY</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {cart.products.map((product) => (
-                            <tr key={product._id} className='bg-secondary border-gray-700 hover:bg-primary transition-all'>
-                                <td className='py-4 px-6 font-medium whitespace-nowrap hover:text-white flex items-center gap-x-2 justify-center'>
-                                    <Image src="/images/f1.png" width={40} height={40} alt='' />
-                                    <span>{product.title}</span>
-                                </td>
-                                <td className='py-4 px-6 font-medium whitespace-nowrap hover:text-white'>{product.extras.map((item) => <span key={item._id}>{item.text},</span>)}</td>
-                                <td className='py-4 px-6 font-medium whitespace-nowrap hover:text-white'>${product.price}</td>
-                                <td className='py-4 px-6 font-medium whitespace-nowrap hover:text-white'>{product.quantity}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                <div className='w-full overflow-auto max-h-[360px]'>
+                    {cart?.products?.length > 0 ? (
+                        <table className='w-full text-sm text-center text-gray-500 min-w[1000px]'>
+                            <thead className='text-xs text-gray-400 uppercase bg-gray-700'>
+                                <tr>
+                                    <th className='py-3 px-6' scope='col'>IMAGE</th>
+                                    <th className='py-3 px-6' scope='col'>NAME</th>
+                                    <th className='py-3 px-6' scope='col'>EXTRAS</th>
+                                    <th className='py-3 px-6' scope='col'>PRICE</th>
+                                    <th className='py-3 px-6' scope='col'>QUANTITY</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {cart.products.map((product) => (
+                                    <tr key={product._id} className='bg-secondary border-gray-700 hover:bg-primary transition-all'>
+                                        <td className='py-4 px-6 font-medium whitespace-nowrap hover:text-white flex items-center justify-center'>
+                                            <Image src="/images/f1.png" width={40} height={40} alt='' />
+                                        </td>
+                                        <td className='py-4 px-6 font-medium whitespace-nowrap hover:text-white'>{product.title}</td>
+                                        <td className='py-4 px-6 font-medium whitespace-nowrap hover:text-white'>
+                                            {product.extras.length > 0 ? product.extras.map((item) => <span key={item._id}>{item.text},</span>) : "No extras"}
+                                        </td>
+                                        <td className='py-4 px-6 font-medium whitespace-nowrap hover:text-white'>${product.price}</td>
+                                        <td className='py-4 px-6 font-medium whitespace-nowrap hover:text-white'>{product.quantity}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    ) : ( 
+                    <div className='w-full h-60 bg-secondary flex flex-col justify-center items-center gap-4 rounded-[46px]'> 
+                        <h1 className='text-2xl text-white'>Your cart is empty, you can add items from the menu</h1>
+                        <Link href={`/menu`}>
+                            <button className='btn-primary'>Go to menu</button>
+                        </Link>
+                    </div> ) }
+                </div>
             </div>
             <div className='bg-secondary md:w-auto w-full min-h-[calc(100vh_-_465px)] flex flex-col md:items-start items-center justify-center text-white p-12'>
                 <Title addClass={"text-[40px]"}>Cart Total</Title>

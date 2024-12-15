@@ -35,7 +35,7 @@ const Order = () => {
     }
 
   return (
-    <div className='p-0 pb-8 flex-1 flex flex-col items-center md:items-start'>
+    <div className='p-0 pb-5 flex-1 flex flex-col items-center md:items-start md:max-h-[calc(100vh_-_465px)]'>
     <Title addClass={"text-[40px]"}>Orders</Title>
     <div className='max-h-[400px] overflow-auto w-full mt-5'>
         <table className='w-full text-sm text-center text-gray-500 min-w[1000px]'>
