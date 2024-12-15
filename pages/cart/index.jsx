@@ -17,6 +17,7 @@ const Index = ({userList}) => {
 
     const newOrder = {
         customer: user?.fullName,
+        customerId: user?._id,
         address: user?.address ? user?.address : "No address",
         total: cart.total,
         status: 0,

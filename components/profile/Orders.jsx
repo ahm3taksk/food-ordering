@@ -26,7 +26,7 @@ const Orders = () => {
         const getOrders = async () => {
             try {
                 const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/orders`);
-                setOrders(res.data.filter((order) => order.customer === currentUser[0]?.fullName))
+                setOrders(res.data.filter((order) => order.customerId === currentUser[0]?._id))
             } catch (error) {
                 console.log(error)
             }

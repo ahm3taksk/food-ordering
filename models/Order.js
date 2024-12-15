@@ -7,6 +7,10 @@ const OrderSchema = new mongoose.Schema(
             required: true,
             maxLength: 100,
         },
+        customerId: {
+            type: String,
+            required: true,
+        },
         address: {
             type: String,
             required: true,
