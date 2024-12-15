@@ -20,15 +20,8 @@ const Login = () => {
     try {
       const res = await signIn("credentials", options);
       actions.resetForm();
-      toast.success('Login Success');
-      if (res.status === 200) {
-        push('/profile/' + currentUser._id);
-      }else{
-        toast.error('Login Failed');
-        console.log(res);
-      }
     } catch (err) {
-      toast.error(err.error);
+      console.log(err);
     }
   };
 
@@ -36,19 +29,16 @@ const Login = () => {
     const getUser = async () => {
       try {
         const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users`);
-        const user = res.data.find((user) => user.email === session?.user.email);
-        if (user) {
-          setCurrentUser(user);
-          push('/profile/' + user._id);
-        }
+        setCurrentUser(
+          res.data?.find((user) => user.email === session?.user?.email)
+        );
+        session && push("/profile/" + currentUser?._id);
       } catch (err) {
         console.log(err);
       }
     };
-    if (session) {
-        getUser();
-    }
-}, [session, push]);
+    getUser();
+  }, [session, push, currentUser]);
 
   const {values, errors, touched, handleSubmit, handleChange, handleBlur} = useFormik({
     initialValues: {
