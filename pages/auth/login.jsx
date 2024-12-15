@@ -20,6 +20,12 @@ const Login = () => {
     try {
       const res = await signIn("credentials", options);
       actions.resetForm();
+      if (res?.error) {
+        toast.error(res.error);
+      } else {
+        push("/profile/" + currentUser?._id);
+        toast.success("Login Success");
+      }
     } catch (err) {
       console.log(err);
     }
@@ -34,7 +40,7 @@ const Login = () => {
         );
         session && push("/profile/" + currentUser?._id);
       } catch (err) {
-        console.log(err);
+        toast.error(err.message);
       }
     };
     getUser();
