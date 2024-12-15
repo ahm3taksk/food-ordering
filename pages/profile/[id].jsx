@@ -5,6 +5,7 @@ import Password from '../../components/profile/Password';
 import Orders from '../../components/profile/Orders';
 import { useRouter } from 'next/router';
 import { signOut, getSession, useSession } from 'next-auth/react';
+import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
