@@ -15,7 +15,7 @@ const Profile = ({user}) => {
     const [tabs, setTabs] = React.useState(0);
 
     const handleSignOut = () => {
-        if(confirm("Are you sure you want to logout?")) {
+        if(confirm("Are you sure you want to logout?")) {   
             signOut({redirect: false});
             session && push('/auth/login');
             toast.success('Logout Success');
@@ -23,6 +23,12 @@ const Profile = ({user}) => {
             toast.warning('Logout Cancelled');
         }
     }
+
+    useEffect(() => {
+        if (!session) {
+            push("/auth/login");
+        }
+    }, [session, push]);
 
 return (
     <div className='container mx-auto px-5 md:px-0'>
@@ -58,27 +64,16 @@ return (
     </div>
 )
 }
-
-export async function getServerSideProps({req, params}) {
-    const session = await getSession({req})
-    
-    if(!session){
-        return {
-            redirect: {
-                destination: '/auth/login',
-                permanent: false,
-            }
-        }
-    }
-
-    const user = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users/${params.id}`);
+export async function getServerSideProps({ req, params }) {
+    const user = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/users/${params.id}`
+    );
 
     return {
         props: {
-            session,
             user: user ? user.data : null,
-        }
-    }
+        },
+    };
 }
 
 export default Profile
