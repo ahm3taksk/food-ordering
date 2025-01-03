@@ -20,6 +20,14 @@ const OrderSchema = new mongoose.Schema(
             type:  Number,
             required: true,
         },
+        quantity: {
+            type: Number,
+            required: true,
+        },
+        products: {
+            type: Array,
+            required: true,
+        },
         status: {
             type: Number,
             default: 0,

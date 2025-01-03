@@ -1,109 +1,166 @@
-import Image from 'next/image'
-import Title from '../../components/ui/Title'
-import { useDispatch, useSelector } from 'react-redux';
-import { reset } from '../../redux/cartSlice';
-import axios from 'axios';
-import { useSession} from 'next-auth/react';
-import { toast } from 'react-toastify';
-import { useRouter } from 'next/router';
-import Link from 'next/link';
+import Image from "next/image";
+import Title from "../../components/ui/Title";
+import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { reset, increaseQuantity, decreaseQuantity, removeProduct } from "../../redux/cartSlice";
+import Input from "../../components/form/Input";
+import axios from "axios";
+import { useSession } from "next-auth/react";
+import { toast } from "react-toastify";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
-const Index = ({userList}) => {
-    const {data: session} = useSession()
-    const cart = useSelector((state) => state.cart)
-    const dispatch = useDispatch()
-    const user = userList.find((user) => user.email === session?.user?.email)
-    const router = useRouter()
+const Index = ({ userList = [] }) => {
+    const { data: session } = useSession();
+    const cart = useSelector((state) => state.cart);
+    const dispatch = useDispatch();
+    const router = useRouter();
 
-    const newOrder = {
-        customer: user?.fullName,
-        customerId: user?._id,
-        address: user?.address ? user?.address : "No address",
-        total: cart.total,
-        status: 0,
-        method: 0,
-    }
+    // Kullanıcı bilgilerini al
+    const user = session?.user?.email && userList.length 
+        ? userList.find((user) => user.email === session.user.email) 
+        : null;
+
+    console.log("🧑‍💻 User Data:", user); // Kullanıcı verisini kontrol et
 
     const createOrder = async () => {
         try {
-            if (session){
-                if(confirm("Are you sure you want to place this order?")){
-                    const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/orders`, newOrder);
-                    if (res.status === 201) {
-                        router.push(`/order/${res.data._id}`)
-                        dispatch(reset())
-                        toast.success("Order placed successfully", {autoClose : 1000}) 
-                    }
+            if (!session) {
+                toast.error("Please login first", { autoClose: 1500 });
+                return;
+            }
+    
+            if (!user) {
+                toast.error("User information not found. Please try again later.", { autoClose: 2000 });
+                return;
+            }
+    
+            if (!user.fullName || !user._id) {
+                toast.error("Incomplete user information. Please update your profile.", { autoClose: 2000 });
+                return;
+            }
+    
+            if (!user.address || user.address.trim() === "") {
+                toast.error("Please add your address information.", { autoClose: 2000 });
+                return;
+            }
+    
+            if (!cart.products.length) {
+                toast.error("Your cart is empty!", { autoClose: 2000 });
+                return;
+            }
+    
+            const newOrder = {
+                customer: user.fullName,
+                customerId: user._id,
+                address: user.address,
+                total: cart.total,
+                quantity: cart.quantity,
+                products: cart.products,
+                status: 0,
+                method: 0,
+            };
+    
+    
+            if (confirm("Are you sure you want to place this order?")) {
+                const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/orders`, newOrder);
+    
+                if (res.status === 201) {
+                    router.push(`/order/${res.data._id}`);
+                    dispatch(reset());
+                    toast.success("Order placed successfully!", { autoClose: 1000 });
                 }
             }
         } catch (error) {
-            toast.error("Please login first", {autoClose : 1000})
-            console.log(error)
+            console.error("Order creation failed");
+            toast.error("omething went wrong. Please try again later.", { autoClose: 2000 });
         }
-    }
+    };
 
-  return (
-    <div className='min-h-[calc(100vh_-_465px)]'>
-        <div className='flex justify-between items-center md:flex-row flex-col'>
-            <div className='min-h-[calc(100vh_-_465px)] flex items-center flex-1 p-10 overflow-x-auto w-full'>
-                <div className='w-full overflow-auto max-h-[360px]'>
-                    {cart?.products?.length > 0 ? (
-                        <table className='w-full text-sm text-center text-gray-500 min-w[1000px]'>
-                            <thead className='text-xs text-gray-400 uppercase bg-gray-700'>
-                                <tr>
-                                    <th className='py-3 px-6' scope='col'>IMAGE</th>
-                                    <th className='py-3 px-6' scope='col'>NAME</th>
-                                    <th className='py-3 px-6' scope='col'>EXTRAS</th>
-                                    <th className='py-3 px-6' scope='col'>PRICE</th>
-                                    <th className='py-3 px-6' scope='col'>QUANTITY</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {cart.products.map((product) => (
-                                    <tr key={product._id} className='bg-secondary border-gray-700 hover:bg-primary transition-all'>
-                                        <td className='py-4 px-6 font-medium whitespace-nowrap hover:text-white flex items-center justify-center'>
-                                            <Image src="/images/f1.png" width={40} height={40} alt='' />
-                                        </td>
-                                        <td className='py-4 px-6 font-medium whitespace-nowrap hover:text-white'>{product.title}</td>
-                                        <td className='py-4 px-6 font-medium whitespace-nowrap hover:text-white'>
-                                            {product.extras.length > 0 ? product.extras.map((item) => <span key={item._id}>{item.text},</span>) : "No extras"}
-                                        </td>
-                                        <td className='py-4 px-6 font-medium whitespace-nowrap hover:text-white'>${product.price}</td>
-                                        <td className='py-4 px-6 font-medium whitespace-nowrap hover:text-white'>{product.quantity}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    ) : ( 
-                    <div className='w-full h-60 bg-secondary flex flex-col justify-center items-center gap-4 rounded-[46px]'> 
-                        <h1 className='text-2xl text-white'>Your cart is empty, you can add items from the menu</h1>
-                        <Link href={`/menu`}>
-                            <button className='btn-primary'>Go to menu</button>
-                        </Link>
-                    </div> ) }
+    return (
+        <div className="container mx-auto mt-5 mb-16 px-5 md:px-0 ">
+            {cart?.products?.length > 0 ? (
+                <div className="flex flex-col md:flex-row items-start gap-4 w-full min-h-[450px]">
+                    <div className="w-full md:w-3/4 min-h-[450px] flex items-start justify-start overflow-auto border rounded-md border-gray-500">
+                        <div className="flex max-h-[450px] w-auto md:w-full flex-col justify-start items-center overflow-y-auto">
+                            {cart.products.map((product) => (
+                                <div key={product._id} className="flex justify-start items-center gap-4 w-auto md:w-full p-4 border-b border-gray-500">
+                                    <div className="relative flex items-center justify-center w-[60px] h-[60px]">
+                                        <Image src={product.img} layout="fill" alt={product.title} />
+                                    </div>
+                                    <button 
+                                        onClick={() => dispatch(removeProduct(product._id))}
+                                        className="btn-danger !h-10 !w-10 border border-danger !p-2 !bg-transparent !text-danger hover:!text-white hover:!bg-danger"
+                                    >
+                                        <i className="fa-solid fa-trash"></i>
+                                    </button>
+                                    <span className="font-bold text-xl w-[200px] md:w-[400px]">
+                                        {product.title}
+                                    </span>
+                                    <div className="md:w-[100px]">
+                                        <div className="flex items-center rounded border border-gray-200">
+                                            <button 
+                                                onClick={() => dispatch(decreaseQuantity(product._id))} 
+                                                type="button" 
+                                                className="size-8 leading-8 text-gray-600 transition hover:opacity-75"
+                                            >
+                                                <i className="fa-solid fa-minus"></i>
+                                            </button>
+                                            <input
+                                                type="number"
+                                                id="Quantity"
+                                                value={product.quantity}
+                                                className="h-8 w-8 border-transparent text-center"
+                                                readOnly
+                                            />
+                                            <button 
+                                                onClick={() => dispatch(increaseQuantity(product._id))} 
+                                                type="button" 
+                                                className="size-8 leading-8 text-gray-600 transition hover:opacity-75"
+                                            >
+                                                <i className="fa-solid fa-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <span className="font-bold text-center text-xl w-[80px]">
+                                        ${product.price.toFixed(2)}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="w-full md:w-1/4 flex flex-col md:items-start items-center justify-start p-6 border rounded-md border-gray-500">
+                        <Title addClass="text-[40px]">Cart Total</Title>
+                        <div className="flex flex-col md:items-start items-center gap-y-1 mt-6 text-lg">
+                            <span><b>Subtotal: </b>${cart.total.toFixed(2)}</span>
+                            <span><b>Discount: </b>$0.00</span>
+                            <span><b>Total: </b>${cart.total.toFixed(2)}</span>
+                        </div>
+                        {/* <div className="flex w-full h-full md:items-start items-center gap-2 mt-6">
+                            <Input type="text" placeholder="Coupon Code" addClass="p-2 rounded-md" />
+                        </div> */}
+                        <button onClick={createOrder} className="btn-primary mt-4">Go to checkout</button>
+                    </div>
                 </div>
-            </div>
-            <div className='bg-secondary md:w-auto w-full min-h-[calc(100vh_-_465px)] flex flex-col md:items-start items-center justify-center text-white p-12'>
-                <Title addClass={"text-[40px]"}>Cart Total</Title>
-                <div className='flex flex-col md:items-start items-center gap-y-1 mt-6'>
-                    <span><b>Subtotal: </b>${cart.total}</span>
-                    <span><b>Discount: </b>$0.00</span>
-                    <span><b>Total: </b>${cart.total}</span>
+            ) : (
+                <div className="w-full min-h-[450px] bg-secondary flex flex-col justify-center items-center gap-4 rounded-[46px]">
+                    <h1 className="text-4xl text-white">Your cart is empty, you can add items from the menu</h1>
+                    <Link href={`/menu`}>
+                        <button className="btn-primary">Go to menu</button>
+                    </Link>
                 </div>
-                <button onClick={createOrder} className='btn-primary mt-4'>Go to checkout</button>
-            </div>
+            )}
         </div>
-    </div>
-  )
-}
+    );
+};
 
 export const getServerSideProps = async () => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users`);
+    const user = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users`);
     return {
         props: {
-            userList: res.data ? res.data : [],
-        }
-    }
+            userList: user.data ? user.data : [],
+        },
+    };
 }
 
-export default Index
+export default Index;
