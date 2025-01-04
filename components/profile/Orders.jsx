@@ -3,6 +3,7 @@ import { useSession } from 'next-auth/react'
 import axios from 'axios'
 import Title from '../ui/Title'
 import Image from 'next/image'
+import Link from 'next/link'
 
 const Orders = () => {
     const [orders, setOrders] = useState([])
@@ -63,10 +64,12 @@ const Orders = () => {
                 <tbody>
                     {orders.length > 0 && orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((order) => (
                         <tr key={order?._id} className='bg-secondary border-gray-700 hover:bg-primary transition-all'>
-                            <td className='py-4 px-6 font-medium whitespace-nowrap hover:text-white'>{order?._id}</td>
+                            <Link href={`/order/${order?._id}`}>
+                                <td className='py-4 px-6 font-medium whitespace-nowrap hover:text-white cursor-pointer'>{order?._id}</td>
+                            </Link>
                             <td className='py-4 px-6 font-medium whitespace-nowrap hover:text-white'>{order?.address}</td>
                             <td className='py-4 px-6 font-medium whitespace-nowrap hover:text-white'>{formatDate(order?.createdAt)}</td>
-                            <td className='py-4 px-6 font-medium whitespace-nowrap hover:text-white'>${order?.total}</td>
+                            <td className='py-4 px-6 font-medium whitespace-nowrap hover:text-white'>${order?.total.toFixed(2)}</td>
                             <td className='py-4 px-6 font-medium whitespace-nowrap hover:text-white'>{status[order?.status]}</td>
                         </tr>
                     ))}

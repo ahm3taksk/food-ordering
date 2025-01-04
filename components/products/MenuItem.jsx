@@ -6,8 +6,6 @@ import { addProduct } from "../../redux/cartSlice";
 
 const MenuItem = ({ product }) => {
     const cart = useSelector((state) => state.cart);
-    const findCart = cart.products.find((item) => item._id === product._id);
-
     const dispatch = useDispatch();
     const handleClick = () => {
         dispatch(addProduct({...product, extras: [], price: product.prices[0], quantity: 1}));
@@ -29,7 +27,8 @@ const MenuItem = ({ product }) => {
             </div>
             <div className='flex justify-between items-center'>
                 <span>${product.prices[0]}</span>
-                <button className='btn-primary !w-10 !h-10 !rounded-full !p-0 grid place-content-center' disabled={findCart} onClick={handleClick} >
+                {/* disabled when quantity of this item more than 10 */}
+                <button className='btn-primary !w-10 !h-10 !rounded-full !p-0 grid place-content-center'  onClick={handleClick} disabled={cart.products.find(item => item._id === product._id)?.quantity >= 10}>
                     <FaShoppingCart />
                 </button>
             </div>

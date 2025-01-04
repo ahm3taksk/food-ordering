@@ -8,50 +8,55 @@ const cartSlice = createSlice({
         total: 0,
     },
     reducers: {
-        addProduct(state, action) {
+        addProduct: (state, action) => {
             const product = action.payload;
-            const existingProduct = state.products.find((item) => item._id === product._id);
+
+            const existingProduct = state.products.find(item => item.uniqueKey === product.uniqueKey);
 
             if (existingProduct) {
                 existingProduct.quantity += product.quantity;
             } else {
-                state.products.push({ ...product, quantity: product.quantity });
+                state.products.push(product);
             }
 
             state.quantity += product.quantity;
-            state.total = parseFloat((state.total + product.price * product.quantity).toFixed(2));
+            state.total = parseFloat(state.total) + (parseFloat(product.price) * product.quantity);
         },
-        removeProduct(state, action) {
-            const productId = action.payload;
-            const product = state.products.find((item) => item._id === productId);
-            
+
+        removeProduct: (state, action) => {
+            const productKey = action.payload;
+            const product = state.products.find(item => item.uniqueKey === productKey);
+
             if (product) {
                 state.quantity -= product.quantity;
-                state.total = parseFloat((state.total - product.price * product.quantity).toFixed(2));
-                state.products = state.products.filter((item) => item._id !== productId);
+                state.total -= parseFloat(product.price) * product.quantity;
+                state.products = state.products.filter(item => item.uniqueKey !== productKey);
             }
         },
-        increaseQuantity(state, action) {
-            const productId = action.payload;
-            const product = state.products.find((item) => item._id === productId);
+
+        increaseQuantity: (state, action) => {
+            const productKey = action.payload;
+            const product = state.products.find(item => item.uniqueKey === productKey);
 
             if (product) {
                 product.quantity += 1;
                 state.quantity += 1;
-                state.total = parseFloat((state.total + product.price).toFixed(2));
+                state.total = parseFloat(state.total) + parseFloat(product.price);
             }
         },
-        decreaseQuantity(state, action) {
-            const productId = action.payload;
-            const product = state.products.find((item) => item._id === productId);
 
-            if (product && product.quantity > 1) {
+        decreaseQuantity: (state, action) => {
+            const productKey = action.payload;
+            const product = state.products.find(item => item.uniqueKey === productKey);
+
+            if (product && product.quantity > 1) { // Quantity cannot go below 1
                 product.quantity -= 1;
                 state.quantity -= 1;
-                state.total = parseFloat((state.total - product.price).toFixed(2));
+                state.total = parseFloat(state.total) - parseFloat(product.price);
             }
         },
-        reset(state) {
+
+        reset: (state) => {
             state.products = [];
             state.quantity = 0;
             state.total = 0;

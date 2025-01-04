@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux';
 const Header = () => {
    const [isSearchModal, setIsSearchModal] = useState(false)
    const [isMenuModal, setIsMenuModal] = useState(false)
-   const cart = useSelector((state) => state.cart)
+   const cart = useSelector((state) => state.cart || { products: [] });
 
    const router = useRouter()
 
@@ -49,11 +49,10 @@ const Header = () => {
                 <Link href="/cart">
                     <span className='relative'>
                         <FaShoppingCart size={18} className={`hover:text-primary transition-all ${router.asPath === "/cart" ? 'text-primary' : 'text-white'}`}/>
-                        <span className='w-4 h-4 absolute -top-2.5 -right-3  flex justify-center items-center rounded-full bg-primary text-xs text-black font-bold'>
-                            {cart.products.length === 0 ? "0" : cart.products.length}
+                        <span className='w-4 h-4 absolute -top-2.5 -right-3 flex justify-center items-center rounded-full bg-primary text-xs text-black font-bold'>
+                            {Array.isArray(cart.products) && cart.products.length ? cart.products.length : 0}
                         </span>
                     </span>
-                    
                 </Link>
                 <button onClick={() => setIsSearchModal(true)}>
                     <FaSearch size={18} className='hover:text-primary transition-all' />
