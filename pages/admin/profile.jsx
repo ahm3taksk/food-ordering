@@ -2,6 +2,7 @@ import React from 'react'
 import Image from 'next/image'
 import Product from '../../components/admin/Product'
 import Order from '../../components/admin/Order'
+import Reservation from '../../components/admin/Reservation'
 import Category from '../../components/admin/Category'
 import Footer from '../../components/admin/Footer'
 import { toast } from 'react-toastify'
@@ -29,7 +30,7 @@ const Profile = () => {
     }
 
   return (
-    <div className='container mx-auto px-5 md:px-0'>
+    <div className='w-full mx-auto px-5 my-2'>
         <div className='flex flex-1 min-h-[calc(100vh_-_465px)] gap-x-10 md:flex-row flex-col'>
             <div className='w-full md:min-w-64 md:w-64'>
                 <div className='relative flex flex-col items-center gap-y-1 p-10 border border-b-0'>
@@ -46,10 +47,14 @@ const Profile = () => {
                         <button>Orders</button>
                     </li>
                     <li onClick={() => setTabs(2)} className={`border border-t-0 w-full p-3 flex items-center justify-center gap-x-2 cursor-pointer hover:bg-primary hover:text-white transition-all ${tabs === 2 && 'bg-primary text-white' }`}>
+                        <i class="fa-regular fa-calendar"></i>
+                        <button>Reservations</button>
+                    </li>
+                    <li onClick={() => setTabs(3)} className={`border border-t-0 w-full p-3 flex items-center justify-center gap-x-2 cursor-pointer hover:bg-primary hover:text-white transition-all ${tabs === 3 && 'bg-primary text-white' }`}>
                         <i class="fa-solid fa-list"></i>
                         <button>Categories</button>
                     </li>
-                    <li onClick={() => setTabs(3)} className={`border border-t-0 w-full p-3 flex items-center justify-center gap-x-2 cursor-pointer hover:bg-primary hover:text-white transition-all ${tabs === 3 && 'bg-primary text-white' }`}>
+                    <li onClick={() => setTabs(4)} className={`border border-t-0 w-full p-3 flex items-center justify-center gap-x-2 cursor-pointer hover:bg-primary hover:text-white transition-all ${tabs === 4 && 'bg-primary text-white' }`}>
                         <i class="fa-solid fa-table"></i>
                         <button>Footer</button>
                     </li>
@@ -61,8 +66,9 @@ const Profile = () => {
             </div>
             {tabs === 0 && ( <Product /> )}
             {tabs === 1 && ( <Order /> )}
-            {tabs === 2 && ( <Category /> )}
-            {tabs === 3 && ( <Footer /> )}
+            {tabs === 2 && ( <Reservation /> )}
+            {tabs === 3 && ( <Category /> )}
+            {tabs === 4 && ( <Footer /> )}
 
         </div>
     </div>

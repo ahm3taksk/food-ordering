@@ -7,9 +7,15 @@ import Link from 'next/link'
 
 const Orders = () => {
     const [orders, setOrders] = useState([])
+    const status = {
+        0: 'Payment',
+        1: 'Preparing',
+        2: 'On The Way',
+        3: 'Delivered',
+    }
     const [currentUser, setCurrentUser] = useState([])
     const {data: session} = useSession()
-    const status = ['Preparing', 'On the way', 'Delivered']
+
 
     function formatDate(dateString) {
         if (!dateString) return "Tarih yok";
@@ -50,8 +56,8 @@ const Orders = () => {
   return (
     <div className='p-0 pb-8 md:p-8 flex-1 flex flex-col items-center md:items-start'>
         <Title addClass={"text-[40px]"}>Orders</Title>
-        <div className='overflow-x-auto w-full mt-5'>
-            <table className='w-full text-sm text-center text-gray-500 min-w[1000px]'>
+        <div className='max-h-[400px] overflow-auto w-full mt-5'>
+            <table className='w-full text-sm text-center text-gray-500 min-w[1000px] '>
                 <thead className='text-xs text-gray-400 uppercase bg-gray-700'>
                     <tr>
                         <th className='py-3 px-6' scope='col'>ID</th>
@@ -79,5 +85,8 @@ const Orders = () => {
     </div>
   )
 }
+
+
+
 
 export default Orders

@@ -49,14 +49,14 @@ const Password = ({user}) => {
 
   return (
     <React.Fragment>
-        <form onSubmit={handleSubmit} className='p-0 pb-8 md:p-8 flex-1 flex flex-col items-center md:items-start'>
+        <form onSubmit={handleSubmit} className='p-0 pb-8 md:p-8 flex-1 flex flex-col items-center md:items-start max-w-[900px]'>
             <Title addClass={"text-[40px]"}>Change Password</Title>
                 <div className='grid lg:grid-cols-2 grid-cols-1 gap-4 mt-4 w-full'>
                     {inputs.map((input) => (
                         <Input key="input.id" {...input} onBlur={handleBlur} onChange={handleChange} />
                     ))}
                 </div>
-            <button className='btn-primary w-full md:w-36 mt-4' type='submit'>Update</button>
+            <button className='btn-primary w-full md:w-56 mt-4' type='submit'>Update</button>
         </form>
     </React.Fragment>
   )

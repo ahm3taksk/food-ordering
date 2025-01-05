@@ -3,11 +3,13 @@ import Image from 'next/image'
 import Account from '../../components/profile/Account'
 import Password from '../../components/profile/Password';
 import Orders from '../../components/profile/Orders';
+import Reservations from '../..//components/profile/Reservations';
 import { useRouter } from 'next/router';
 import { signOut, getSession, useSession } from 'next-auth/react';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+
 
 const Profile = ({user}) => {
     const { data: session } = useSession();
@@ -32,11 +34,11 @@ const Profile = ({user}) => {
     }, [session, push]);
 
 return (
-    <div className='container mx-auto px-5 md:px-0'>
+    <div className='w-full mx-auto px-5 my-2'>
         <div className='flex flex-1 min-h-[calc(100vh_-_465px)] gap-x-10 md:flex-row flex-col'>
             <div className='w-full md:w-64'>
                 <div className='relative flex flex-col items-center gap-y-1 p-10 border border-b-0'>
-                    <Image src={user.image ? user.image : "/images/profile.png"} alt="" width={100} height={100} className='rounded-full'/>
+                    <Image src={user.avatar} alt="Avatar" width={120} height={120} className='rounded-full w-[120px] h-[120px] object-cover'/>
                     <span className='font-bold text-xl text-center'>{user.fullName}</span>
                 </div>
                 <ul className='w-full font-semibold'>
@@ -52,6 +54,10 @@ return (
                         <i class="fa-solid fa-boxes-stacked"></i>
                         <button>Orders</button>
                     </li>
+                    <li onClick={() => setTabs(3)} className={`border border-t-0 w-full p-3 flex items-center justify-center gap-x-2 cursor-pointer hover:bg-primary hover:text-white transition-all ${tabs === 3 && 'bg-primary text-white' }`}>
+                        <i class="fa-regular fa-calendar"></i>
+                        <button>Reservations</button>
+                    </li>
                     <li onClick={handleSignOut} className='border border-t-0 w-full p-3 flex items-center justify-center gap-x-2 cursor-pointer hover:bg-primary hover:text-white transition-all'>
                         <i class="fa-solid fa-right-from-bracket"></i>
                         <button>Logout</button>
@@ -61,6 +67,8 @@ return (
             {tabs === 0 && ( <Account user={user} /> )}
             {tabs === 1 && ( <Password user={user} /> )}
             {tabs === 2 && ( <Orders /> )}
+            {tabs === 3 && ( <Reservations /> )}
+
         </div>
     </div>
 )

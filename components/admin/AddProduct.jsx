@@ -62,8 +62,11 @@ const AddProduct = ({setIsProductModal}) => {
         data.append('upload_preset', 'food-ordering');
         // data.append('cloud_name', 'dlkqsghxd');
         try {
+            if (!file) {
+                data.append('file', 'https://res.cloudinary.com/dlkqsghxd/image/upload/v1633666824/food-ordering/food-placeholder.png');
+            } 
             const uploadRes = await axios.post('https://api.cloudinary.com/v1_1/dlkqsghxd/image/upload', data);
-            const {url} = uploadRes.data    
+            const {url} = uploadRes.data
             const newProduct = {
                 img: url,
                 title,
@@ -97,7 +100,7 @@ const AddProduct = ({setIsProductModal}) => {
                             <input type="file" className='hidden' onChange={handleChange}/>
                             <button className="btn-primary !rounded-none !bg-blue-600 pointer-events-none">Choose an image</button>
                             {/* eslint-disable-next-line @next/next/no-img-element */}
-                            {imageSrc && <img src={imageSrc} alt='' className='w-24 h-24 mt-2 object-contain'/>}
+                            {imageSrc && <img src={imageSrc} alt='' className='w-24 h-24 mt-2 object-contain cursor-not-allowed'/>}
                         </label>
                     </div>
                     <div className='flex flex-col text-sm mt-4'>

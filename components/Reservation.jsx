@@ -3,13 +3,43 @@ import Title from '../components/ui/Title'
 import Input from '../components/form/Input'
 import { useFormik } from 'formik';
 import { reservationSchema } from '../schema/reservationSchema';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { toast } from 'react-toastify';
+
 
 const Reservation = () => {
+    const [currentUser, setCurrentUser] = useState([])
+    const {data: session} = useSession()
+
+    useEffect(() => {
+        const getUsers = async () => {
+            try {
+                const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users`);
+                setCurrentUser(res.data.filter((user) => user.email === session.user.email))
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        getUsers()
+    }, [session])
 
     const onSubmit = async (values, actions) => {
-        await new Promise((resolve => setTimeout(resolve, 4000)));
-        actions.resetForm();
+        try {
+            const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/reservations`, {
+                ...values,
+                userId: currentUser[0]?._id,
+            });
+            if (res.status === 201) {
+                toast.success('Reservation created successfully');
+                actions.resetForm();
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
+    
 
     const {values, errors, touched, handleSubmit, handleChange, handleBlur} = useFormik({
         initialValues: {

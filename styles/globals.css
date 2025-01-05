@@ -21,6 +21,10 @@ body {
     @apply text-white px-[30px] py-[8px] rounded-xl bg-danger cursor-pointer hover:opacity-70 transition-all disabled:opacity-50 disabled:cursor-not-allowed;
 }
 
+.btn-success {
+    @apply text-white px-[30px] py-[8px] rounded-xl bg-success cursor-pointer hover:opacity-70 transition-all disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
 .btn-warning {
     @apply text-white px-[30px] py-[8px] rounded-xl bg-warning cursor-pointer hover:opacity-70 transition-all disabled:opacity-50 disabled:cursor-not-allowed;
 }

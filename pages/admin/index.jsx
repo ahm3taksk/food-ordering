@@ -56,7 +56,7 @@ const Login = () => {
   ]
 
   return (
-    <div className='container mx-auto px-5 md:px-0'>
+    <div className='container mx-auto px-5 md:px-0 min-h-[calc(100vh-400px)] flex justify-center items-center'>
       <form onSubmit={handleSubmit} className='flex flex-col items-center my-20 md:w-1/2 w-full mx-auto'>
         <Title addClass={"text-[40px] mb-6"}>Admin Login</Title>
         <div className='flex flex-col gap-y-2 w-full'>
