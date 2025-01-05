@@ -162,7 +162,7 @@ const Footer = () => {
                     </div>
                 </div>
                 <div className='flex flex-col md:flex-row w-full gap-x-5'>
-                    <ul className='flex flex-wrap items-center gap-x-6 gap-y-2 w-full mt-4 border border-primary p-2'>
+                    <ul className='flex flex-wrap items-center gap-x-6 gap-y-2 w-full mt-4 border border-primary bg-white p-2'>
                     {socialMediaLinks.map((item, index) => (
                         <li key={index} className="flex items-center justify-center">
                             <i className={`${item.icon} text-2xl`}></i>

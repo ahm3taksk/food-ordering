@@ -35,9 +35,9 @@ const Order = () => {
     }
 
   return (
-    <div className='w-full overflow-auto md:max-h-[calc(100vh_-_465px)] pb-5'>
+    <div className='w-full md:max-h-[calc(100vh_-_200px)] pb-5'>
     <Title addClass={"text-[40px]"}>Orders</Title>
-    <div className='max-h-[400px] overflow-auto w-full mt-5'>
+    <div className='h-[calc(100vh_-_200px)] max-h-[calc(100vh_-_200px)] overflow-auto w-full mt-5'>
         <table className='w-full text-sm text-center text-gray-500 min-w[1000px]'>
             <thead className='text-xs text-gray-400 uppercase bg-gray-700'>
                 <tr>

@@ -42,14 +42,14 @@ const Category = () => {
 
 
   return (
-    <div className='flex-1 overflow-auto md:max-h-[calc(100vh_-_465px)] pb-5' >
+    <div className='flex-1 pb-5 md:max-h-[calc(100vh_-_300px)]' >
         <Title addClass={"text-[40px]"}>Category</Title>
         <div className='mt-5'>
             <div className='flex gap-4 flex-col sm:flex-row flex-1 items-center'>
                 <Input placeholder="Add a new Category..." onChange={(e) => setInputText(e.target.value)} value={inputText} />
                 <button onClick={handleCreate} className="btn-primary w-full sm:w-auto" >Add</button>
             </div>
-            <div className='mt-10 max-h-[250px] overflow-auto pb-4'>
+            <div className='mt-10 h-[calc(100vh_-_300px)] max-h-[calc(100vh_-_300px)] overflow-auto pb-4 bg-white rounded-md shadow-md p-5'>
                 {categories.map((category) => (
                     <div className='flex justify-between mt-4' key={category._id}>
                         <span className='font-bold text-xl'>{category.title}</span>
