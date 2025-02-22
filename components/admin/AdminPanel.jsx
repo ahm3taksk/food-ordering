@@ -6,6 +6,7 @@ import Order from './Order';
 import Reservation from './Reservation';
 import Category from './Category';
 import Footer from './Footer';
+import Tables from './Tables';
 import Link from 'next/link';
 import { toast } from 'react-toastify';
 import axios from 'axios';
@@ -145,6 +146,18 @@ const AdminPanel = () => {
                             <i className="fa-solid fa-table" />
                             {sidebarOpen && <button>Footer</button>}
                         </li>
+                        <li
+                            onClick={() => {
+                                setSidebarOpen(false);
+                                setTabs(6);
+                            }}
+                            className={`rounded-md w-full p-3 flex items-center justify-start gap-x-2 cursor-pointer hover:bg-primary hover:text-white transition-all ${
+                                tabs === 6 && 'bg-primary text-white'
+                            }`}
+                        >
+                            <i className="fa-solid fa-chair" />
+                            {sidebarOpen && <button>Tables</button>}
+                        </li>
                         <li className={`rounded-md w-full p-3 flex items-center justify-start gap-x-2 cursor-pointer hover:bg-primary hover:text-white transition-all`}>
                             <Link href="/" className='flex items-center justify-start gap-x-2'>
                                 <i className="fa-solid fa-home" />
@@ -169,6 +182,7 @@ const AdminPanel = () => {
                     {tabs === 3 && <Reservation />}
                     {tabs === 4 && <Category />}
                     {tabs === 5 && <Footer />}
+                    {tabs === 6 && <Tables />}
                 </div>
             </div>
         </div>
