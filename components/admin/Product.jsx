@@ -38,7 +38,7 @@ const Product = () => {
     
   return (
     <div className='p-0 pb-5 flex-1 flex flex-col items-center md:items-start md:max-h-[calc(100vh_-_200px)]'>
-        <div className='flex w-full justify-between items-center'>
+        <div className='flex flex-col md:flex-row w-full justify-between items-center'>
             <Title tle addClass={"text-[40px]"}>Products</Title>
             <button className='btn-primary flex justify-center items-center gap-x-2' onClick={() => setIsProductModal(true)}>
                 <span>Add Product</span>

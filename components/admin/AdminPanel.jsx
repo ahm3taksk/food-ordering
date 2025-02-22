@@ -54,7 +54,7 @@ const AdminPanel = () => {
                     } transition-all duration-300 bg-gray-800 text-white p-5 md:min-h-screen relative z-50 w-full`}
                 >
                     <button
-                        className="text-white text-xl mb-1 md:mb-5 w-full flex justify-center items-center gap-2"
+                        className="text-white text-xl mb-5 w-full flex justify-center items-center gap-2"
                         onClick={() => setSidebarOpen(!sidebarOpen)}
                     >
                         <i className='fa fa-bars' />
@@ -72,7 +72,7 @@ const AdminPanel = () => {
                         {sidebarOpen && <span className="font-bold text-2xl">Admin</span>}
                     </div>
 
-                    <ul className={`${sidebarOpen ? 'md:flex flex-col gap-2 w-full' : 'flex-col md:flex hidden'}`}>
+                    <ul className={`${sidebarOpen ? 'flex flex-col gap-2 w-full' : 'flex-col gap-2 md:flex hidden'}`}>
                         <li
                             onClick={() => {
                                 setSidebarOpen(false);
