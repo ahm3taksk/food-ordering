@@ -17,17 +17,17 @@ Router.events.on("routeChangeComplete", () => nProgress.done());
 Router.events.on("routeChangeError", () => nProgress.done());
 
 export default function App({ Component, pageProps: { session, ...pageProps } }) {
-  const LayoutUsed = Component.name === "AdminPage" ? React.Fragment : Layout;
+  const showHeaderFooter = Component.name !== "AdminPage";
 
   return (
     <SessionProvider session={session}>
       <Provider store={store}>
-        <LayoutUsed>
+        <Layout showHeaderFooter={showHeaderFooter}>
           <div className="pt-[88px]">
             <ToastContainer />
             <Component {...pageProps} />
           </div>
-        </LayoutUsed>
+        </Layout>
       </Provider>
     </SessionProvider>
   );
