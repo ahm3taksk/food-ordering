@@ -7,7 +7,7 @@ import { Provider } from "react-redux";
 import { SessionProvider } from "next-auth/react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Router } from "next/router";
+import { Router, useRouter } from "next/router";
 import nProgress from "nprogress";
 import "nprogress/nprogress.css";
 import store from "../redux/store";
@@ -17,7 +17,8 @@ Router.events.on("routeChangeComplete", () => nProgress.done());
 Router.events.on("routeChangeError", () => nProgress.done());
 
 export default function App({ Component, pageProps: { session, ...pageProps } }) {
-  const showHeaderFooter = Component.name !== "AdminPage";
+  const router = useRouter();
+  const showHeaderFooter = !router.pathname.includes("/admin");
 
   return (
     <SessionProvider session={session}>
